@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Product List</title>
+    <th:block th:replace="~{layout::link-css}"></th:block>
+    <th:block th:replace="~{layout::custom-css}"></th:block>
+</head>
+<body>
+<th:block th:replace="~{layout::header}"></th:block>
+<section class="container">
+    <h1 class="text-center">Add New Product</h1>
+    <form th:action="@{/products/add}" th:object="${product}" method="post" enctype="multipart/form-data"
+          class="needs-validation my-5">
+        <div class="row">
+            <div class="col-4">
+                <div class="mb-3">
+                    <div class="image-preview" id="imagePreview">
+                        <img src="" alt="Image Product" id="imageDisplay">
+                    </div>
+                    <label for="imageFile">Image:</label>
+                    <input type="file" id="imageFile" name="imageFile" onchange="previewImage(event)">
+                </div>
+                <div class="mb-3">
+                    <label for="imageFiles">Images List:</label>
+                    <input type="file" multiple id="imageFiles" name="imageFiles">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" th:field="*{name}" class="form-control" id="name">
+                    <div class="text-danger" th:if="${#fields.hasErrors('name')}"
+                         th:errors="*{name}"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price:</label>
+                    <input type="text" th:field="*{price}" class="form-control" id="price"
+                           th:value="${#numbers.formatDecimal(price, 1, 'COMMA', 0, 'POINT')}">
+                    <div class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Price Error
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="amount" class="form-label">Amount:</label>
+                    <input type="number" th:field="*{amount}" class="form-control" id="amount">
+                    <div class="text-danger" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}">Amount Error
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category:</label>
+                    <select th:field="*{category}" class="form-control" id="category">
+                        <option value="" selected>-- Category Name --</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+                    <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Category
+                        Error
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="supplier" class="form-label">Supplier:</label>
+                    <select th:field="*{supplier}" class="form-control" id="supplier">
+                        <option value="" selected>-- Supplier Name --</option>
+                        <option th:each="supplier : ${suppliers}"
+                                th:value="${supplier.id}" th:text="${supplier.company_name}"></option>
+                    </select>
+                    <div class="text-danger" th:if="${#fields.hasErrors('supplier')}" th:errors="*{supplier}">Supplier
+                        Error
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea th:field="*{description}" class="form-control" id="description"></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">
+                        Description Error
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Add Product</button>
+        <a th:href="@{/products}" class="btn btn-link">Cancel</a>
+    </form>
+</section>
+<th:block th:replace="~{layout::footer}"></th:block>
+</body>
+</html>
